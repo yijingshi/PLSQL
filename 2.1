@@ -1,0 +1,268 @@
+SQL> SELECT DISTINCT idproduct, p.productname
+  2  FROM bb_basketitem inner join bb_product p
+  3  using (idproduct);
+
+ IDPRODUCT PRODUCTNAME
+---------- -------------------------
+         8 Brazil
+        10 Espresso
+         9 Ethiopia
+         6 Guatamala
+         2 Capresso Ultima
+         7 Columbia
+         4 Coffee Grinder
+
+7 rows selected.
+
+SQL> traditional
+SP2-0734: unknown command beginning "traditiona..." - rest of line ignored.
+SQL> select distinct b.idproduct, b.idbasket, p.productname, p.description
+  2  from bb_basketitem b, bb_product p
+  3  where b.idproduct = p.idproduct
+  4  order by idproduct;
+
+ IDPRODUCT   IDBASKET PRODUCTNAME               DESCRIPTION
+---------- ---------- ------------------------- ----------------------------------------------------------------------------------------------------
+         2          6 Capresso Ultima           Coffee and Espresso and Cappuccino Machine. Brews from one espresso to two six ounce cups of coffee
+         4          4 Coffee Grinder            Avoid blade grinders! This mill grinder allows you to choose a fine grind to a coarse grind.
+         4         10 Coffee Grinder            Avoid blade grinders! This mill grinder allows you to choose a fine grind to a coarse grind.
+         6          3 Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         6         10 Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         6         12 Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         7          5 Columbia                  dry, nutty flavor and smoothness
+         7          7 Columbia                  dry, nutty flavor and smoothness
+         7          8 Columbia                  dry, nutty flavor and smoothness
+         7          9 Columbia                  dry, nutty flavor and smoothness
+         7         12 Columbia                  dry, nutty flavor and smoothness
+         7         15 Columbia                  dry, nutty flavor and smoothness
+         7         16 Columbia                  dry, nutty flavor and smoothness
+         8          3 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          5 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          7 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          8 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          9 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         10 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         12 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         15 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         16 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         9          5 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         11 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         12 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         13 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+        10          5 Espresso                  dense, caramel-like sweetness with a soft acidity. Roasted somewhat darker than traditional Italian.
+        10          6 Espresso                  dense, caramel-like sweetness with a soft acidity. Roasted somewhat darker than traditional Italian.
+
+28 rows selected.
+
+SQL> #ANSI
+SP2-0042: unknown command "ANSI" - rest of line ignored.
+SQL> select idproduct, b.idbasket, p.productname, p.description
+  2  from bb_basketitem b inner join bb_product p
+  3  using (idproduct)
+  4  order by idproduct;
+
+ IDPRODUCT   IDBASKET PRODUCTNAME               DESCRIPTION
+---------- ---------- ------------------------- ----------------------------------------------------------------------------------------------------
+         2          6 Capresso Ultima           Coffee and Espresso and Cappuccino Machine. Brews from one espresso to two six ounce cups of coffee
+         4         10 Coffee Grinder            Avoid blade grinders! This mill grinder allows you to choose a fine grind to a coarse grind.
+         4          4 Coffee Grinder            Avoid blade grinders! This mill grinder allows you to choose a fine grind to a coarse grind.
+         6         10 Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         6          3 Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         6         12 Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         7          8 Columbia                  dry, nutty flavor and smoothness
+         7         16 Columbia                  dry, nutty flavor and smoothness
+         7          7 Columbia                  dry, nutty flavor and smoothness
+         7         15 Columbia                  dry, nutty flavor and smoothness
+         7          9 Columbia                  dry, nutty flavor and smoothness
+         7          5 Columbia                  dry, nutty flavor and smoothness
+         7         12 Columbia                  dry, nutty flavor and smoothness
+         8         10 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          9 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          8 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          7 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          5 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          3 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         16 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         15 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         12 Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         9         13 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         12 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9          5 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         11 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+        10          5 Espresso                  dense, caramel-like sweetness with a soft acidity. Roasted somewhat darker than traditional Italian.
+        10          6 Espresso                  dense, caramel-like sweetness with a soft acidity. Roasted somewhat darker than traditional Italian.
+
+28 rows selected.
+
+SQL> Traditional
+SP2-0734: unknown command beginning "Traditiona..." - rest of line ignored.
+SQL> select distinct b.idproduct, b.idbasket, s.lastname, p.productname, p.description
+  2  from bb_basketitem b, bb_product p, bb_basket ba, bb_shopper s
+  3  where b.idproduct = p.idproduct and ba.idbasket=b.idbasket and s.idshopper = ba.idshopper
+  4  order by idproduct;
+
+ IDPRODUCT   IDBASKET LASTNAME             PRODUCTNAME               DESCRIPTION
+---------- ---------- -------------------- ------------------------- ----------------------------------------------------------------------------------------------------
+         2          6 Somner               Capresso Ultima           Coffee and Espresso and Cappuccino Machine. Brews from one espresso to two six ounce cups of coffee
+         4          4 Carter               Coffee Grinder            Avoid blade grinders! This mill grinder allows you to choose a fine grind to a coarse grind.
+         4         10 Sonnie               Coffee Grinder            Avoid blade grinders! This mill grinder allows you to choose a fine grind to a coarse grind.
+         6          3 Carter               Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         6         10 Sonnie               Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         6         12 Savid                Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         7          5 Somner               Columbia                  dry, nutty flavor and smoothness
+         7          7 Ratman               Columbia                  dry, nutty flavor and smoothness
+         7          8 Ratman               Columbia                  dry, nutty flavor and smoothness
+         7          9 Ratman               Columbia                  dry, nutty flavor and smoothness
+         7         12 Savid                Columbia                  dry, nutty flavor and smoothness
+         7         15 Parker               Columbia                  dry, nutty flavor and smoothness
+         7         16 Parker               Columbia                  dry, nutty flavor and smoothness
+         8          3 Carter               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          5 Somner               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          7 Ratman               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          8 Ratman               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          9 Ratman               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         10 Sonnie               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         12 Savid                Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         15 Parker               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         16 Parker               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         9          5 Somner               Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         11 Sonnie               Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         12 Savid                Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         13 Cast                 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+        10          5 Somner               Espresso                  dense, caramel-like sweetness with a soft acidity. Roasted somewhat darker than traditional Italian.
+        10          6 Somner               Espresso                  dense, caramel-like sweetness with a soft acidity. Roasted somewhat darker than traditional Italian.
+
+28 rows selected.
+
+SQL> ANSI
+SP2-0042: unknown command "ANSI" - rest of line ignored.
+SQL> select idproduct, idbasket,s.lastname,p.productname, p.description
+  2  from bb_basketitem b inner join bb_product p
+  3  using (idproduct)
+  4  inner join bb_basket ba
+  5  using (idbasket)
+  6  inner join bb_shopper s
+  7  using (idshopper)
+  8  order by idproduct;
+
+ IDPRODUCT   IDBASKET LASTNAME             PRODUCTNAME               DESCRIPTION
+---------- ---------- -------------------- ------------------------- ----------------------------------------------------------------------------------------------------
+         2          6 Somner               Capresso Ultima           Coffee and Espresso and Cappuccino Machine. Brews from one espresso to two six ounce cups of coffee
+         4          4 Carter               Coffee Grinder            Avoid blade grinders! This mill grinder allows you to choose a fine grind to a coarse grind.
+         4         10 Sonnie               Coffee Grinder            Avoid blade grinders! This mill grinder allows you to choose a fine grind to a coarse grind.
+         6          3 Carter               Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         6         10 Sonnie               Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         6         12 Savid                Guatamala                 heavy body, spicy twist, aromatic and smokey flavor.
+         7          7 Ratman               Columbia                  dry, nutty flavor and smoothness
+         7          8 Ratman               Columbia                  dry, nutty flavor and smoothness
+         7          9 Ratman               Columbia                  dry, nutty flavor and smoothness
+         7         12 Savid                Columbia                  dry, nutty flavor and smoothness
+         7         15 Parker               Columbia                  dry, nutty flavor and smoothness
+         7          5 Somner               Columbia                  dry, nutty flavor and smoothness
+         7         16 Parker               Columbia                  dry, nutty flavor and smoothness
+         8         16 Parker               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          3 Carter               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          5 Somner               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          7 Ratman               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          8 Ratman               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8          9 Ratman               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         15 Parker               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         12 Savid                Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         8         10 Sonnie               Brazil                    well-balanced mellow flavor, a medium body with hints of cocoa and a mild, nut-like aftertaste
+         9         12 Savid                Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         13 Cast                 Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9          5 Somner               Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+         9         11 Sonnie               Ethiopia                  distinctive berry-like flavor and aroma, reminds many of a fruity, memorable wine.
+        10          6 Somner               Espresso                  dense, caramel-like sweetness with a soft acidity. Roasted somewhat darker than traditional Italian.
+        10          5 Somner               Espresso                  dense, caramel-like sweetness with a soft acidity. Roasted somewhat darker than traditional Italian.
+
+28 rows selected.
+
+SQL> select idbasket, idshopper, to_char(dtordered, 'fmMonth dd, rrrr')dtordered
+  2  from bb_basket
+  3  where Trunc(dtordered,'MM')=To_Date('FEB-12', 'MON-RR');
+
+  IDBASKET  IDSHOPPER DTORDERED
+---------- ---------- ---------------------------------------------
+         4         21 February 12, 2012
+         5         22 February 19, 2012
+         8         23 February 16, 2012
+        10         24 February 7, 2012
+        11         24 February 27, 2012
+        12         25 February 19, 2012
+
+6 rows selected.
+
+SQL> select idproduct, sum(quantity)
+  2  from bb_basketitem
+  3  group by idproduct
+  4  order by idproduct;
+
+ IDPRODUCT SUM(QUANTITY)
+---------- -------------
+         2             1
+         4             2
+         6             4
+         7             7
+         8            11
+         9             6
+        10             3
+
+7 rows selected.
+
+SQL> select idproduct, sum(quantity)
+  2  from bb_basketitem
+  3  having sum(quantity)<3
+  4  group by idproduct;
+
+ IDPRODUCT SUM(QUANTITY)
+---------- -------------
+         2             1
+         4             2
+
+SQL> select idproduct, productname, price
+  2  from bb_product
+  3  where price > (select avg(price) from bb_product);
+
+ IDPRODUCT PRODUCTNAME                    PRICE
+---------- ------------------------- ----------
+         1 CapressoBar Model #351         99.99
+         2 Capresso Ultima               129.99
+
+SQL> CREATE TABLE bb_contacts ( Con_id NUMBER (4),
+  2  Company_name VARCHAR2(30) NOT NULL,
+  3  Email VARCHAR2(30),
+  4  Last_date DATE DEFAULT SYSDATE,
+  5  Con_cnt NUMBER(3)
+  6  CHECK (Con_cnt>0),
+  7  PRIMARY KEY (Con_id) );
+
+Table created.
+
+SQL> INSERT INTO BB_CONTACTS (Con_ID, Company_NAME, Email,Last_date,Con_cnt)
+  2  VALUES (1, 'Donald Duck', 'donaldduck@gmail.com', (TO_DATE('2015/04/01 12:32:44', 'yyyy/mm/dd hh24:mi:ss')), 3);
+
+1 row created.
+
+SQL> INSERT INTO BB_CONTACTS (Con_ID, Company_NAME, Email,Last_date,Con_cnt)
+  2  VALUES (2, 'Jose Squartpump', 'josesquartpump@gmail.com', (TO_DATE('2015/05/01 22:42:44', 'yyyy/mm/dd hh24:mi:ss')), 4);
+
+1 row created.
+
+SQL> UPDATE BB_CONTACTS SET EMAIL= 'funnyduck@gmail.com' WHERE EMAIL = 'donaldduck@gmail.com';
+
+1 row updated.
+
+SQL> select * from bb_contacts;
+
+    CON_ID COMPANY_NAME                   EMAIL                          LAST_DATE    CON_CNT
+---------- ------------------------------ ------------------------------ --------- ----------
+         1 Donald Duck                    funnyduck@gmail.com            01-APR-15          3
+         2 Jose Squartpump                josesquartpump@gmail.com       01-MAY-15          4
+
+SQL> rollback;
+
+Rollback complete.
+
+
+SQL> exit
