@@ -1,0 +1,434 @@
+1.
+create table theater 
+(trow number (20) primary key,
+tcolumn number (2));
+declare
+    List# number;
+    C_XYZ number(10);
+    V_Counter1 binary_integer;
+    v_row_number theater.trow%type;
+    string_A varchar(50);
+begin
+    execute immediate 'CREATE SEQUENCE List#
+    START WITH 1
+    INCREMENT BY 1';
+end;
+
+PL/SQL procedure successfully completed.
+
+2.
+create table student
+(stu_ID number,
+Lname VARCHAR2(20),
+Fname VARCHAR2(20),
+MI VARCHAR2(1),
+Sex VARCHAR2(1),
+Major VARCHAR2(10),
+Home_State VARCHAR2(4),
+CONSTRAINT student_stuID_pk PRIMARY KEY (stu_id));
+
+create table course
+(Course_ID VARCHAR2(8),
+Section# NUMBER,
+C_name VARCHAR2(20),
+C_Description VARCHAR(30),
+CONSTRAINT course_courseId_pk PRIMARY KEY (Course_ID));
+
+CREATE TABLE student_course
+(Stu_ID number,
+Course_ID VARCHAR2(8),
+Section# NUMBER,
+CONSTRAINT student_course_stid_crsid_pk PRIMARY KEY (Stu_ID, Course_ID),
+CONSTRAINT student_course_stuid_fk FOREIGN KEY (Stu_ID)
+            REFERENCES student(Stu_ID));
+
+INSERT INTO student
+  VALUES(10001, 'SMITH', 'RON', 'M', 'M', 'MATH', 'TX');
+INSERT INTO student
+    VALUES(10002, 'JONES', 'PETER', 'A', 'M', 'ENGLISH', 'TX');
+INSERT INTO student
+  VALUES(10003, 'PETERS', 'ANNE', 'A', 'F', 'ENGLISH', 'ME');
+INSERT INTO student
+  VALUES(10004, 'JOHNSON', 'JOHN', 'J', 'M', 'COMPSCI', 'CA');
+INSERT INTO student
+  VALUES(10005, 'PENDERS', 'ALTON', 'P', 'F', 'MATH', 'GA');
+INSERT INTO student
+  VALUES(10006, 'ALLEN', 'DIANE', 'J', 'F', 'GEORGRAPHY', 'MINN');
+INSERT INTO student (Stu_id, Lname, Fname, Sex, Major, Home_state)
+  VALUES(10007, 'GILL', 'JENNIFER', 'F', 'COMPSCI', 'TX');
+INSERT INTO student (Stu_id, Lname, Fname, Sex, Major, Home_state)
+  VALUES(10008, 'JOHNS', 'ROBERTA', 'F', 'COMPSC', 'TX');
+INSERT INTO student (Stu_id, Lname, Fname, Sex, Major, Home_state)
+  VALUES(10009, 'WEIR', 'PAUL', 'M','MATH','ALA');
+INSERT INTO student (Stu_id, Lname, Fname, Sex, Major, Home_state)
+  VALUES(10010, 'EVANS', 'RICHARD', 'M', 'ENGLISH', 'TX');
+  
+INSERT INTO course
+	VALUES('COSC1300', 001, 'INTRO TO COMP.', 'FIRST COMPUTER COURSE');
+INSERT INTO course
+  VALUES('ITSE2309', 001, 'INTRO TO DB', 'FIRST DATABASE COURSE');
+INSERT INTO course
+  VALUES('GEOG1791', 002, 'WORLD GEOGRAPHY', 'SECOND GEOGRAPHY COURSE');
+INSERT INTO course
+  VALUES('COSC1315', 001, 'INTRO TO PROG.', 'SECOND COMPUTER COURSE');
+INSERT INTO course
+  VALUES('ITSE1345', 001, 'INTRO TO DB PROG', 'SECOND DATABASE COURSE');
+INSERT INTO course
+  VALUES('ENGL2617', 002, 'ENGLISH LITERATURE', 'SECOND ENGLISH COURSE');
+INSERT INTO course
+  VALUES('MATH1101', 001, 'CALCULUS 1', 'SECOND MATH COURSE');
+INSERT INTO course
+  VALUES('ENGL1001', 001, 'AMERICAN LITERATURE', 'FIRST ENGLISH COURSE');
+INSERT INTO course
+  VALUES('MATH1011', 001, 'TRIG. N ALGEBRA', 'FIRST MATH COURSE');
+INSERT INTO course
+  VALUES('GEOG1010', 001, 'TEXAS GEOGRAPHY', 'FIRST GEOGRAPHY COURSE');
+  
+INSERT INTO student_course
+  VALUES(10001, 'MATH1101', 001);
+INSERT INTO student_course
+  VALUES(10002, 'ENGL2617', 002);
+INSERT INTO student_course
+  VALUES(10003, 'ENGL1001', 001);
+INSERT INTO student_course
+  VALUES(10003, 'ENGL2617', 002);
+INSERT INTO student_course
+  VALUES(10003, 'GEOG101', 001);
+INSERT INTO student_course
+  VALUES(10004, 'COSC1315', 001);
+INSERT INTO student_course
+  VALUES(10005, 'MATH1101', 001);
+INSERT INTO student_course
+  VALUES(10006, 'GEOG101', 001);
+INSERT INTO student_course
+  VALUES(10006, 'GEOG1791', 002);
+INSERT INTO student_course
+  VALUES(10007, 'COSC1315', 001);
+INSERT INTO student_course
+  VALUES(10007, 'ITSE2309', 001);
+INSERT INTO student_course
+  VALUES(10008, 'COSC1315', 001);
+INSERT INTO student_course
+  VALUES(10009, 'ITSE2309', 001);
+INSERT INTO student_course
+  VALUES(10010, 'ENGL2617', 002); 
+
+select * from student;
+
+    STU_ID LNAME                FNAME                M S MAJOR      HOME
+---------- -------------------- -------------------- - - ---------- ----
+     10001 SMITH                RON                  M M MATH       TX  
+     10002 JONES                PETER                A M ENGLISH    TX  
+     10003 PETERS               ANNE                 A F ENGLISH    ME  
+     10004 JOHNSON              JOHN                 J M COMPSCI    CA  
+     10005 PENDERS              ALTON                P F MATH       GA  
+     10006 ALLEN                DIANE                J F GEORGRAPHY MINN
+     10007 GILL                 JENNIFER               F COMPSCI    TX  
+     10008 JOHNS                ROBERTA                F COMPSC     TX  
+     10009 WEIR                 PAUL                   M MATH       ALA 
+     10010 EVANS                RICHARD                M ENGLISH    TX 
+
+select * from course;
+
+COURSE_I   SECTION# C_NAME               C_DESCRIPTION                 
+-------- ---------- -------------------- ------------------------------
+COSC1300          1 INTRO TO COMP.       FIRST COMPUTER COURSE         
+ITSE2309          1 INTRO TO DB          FIRST DATABASE COURSE         
+GEOG1791          2 WORLD GEOGRAPHY      SECOND GEOGRAPHY COURSE       
+COSC1315          1 INTRO TO PROG.       SECOND COMPUTER COURSE        
+ITSE1345          1 INTRO TO DB PROG     SECOND DATABASE COURSE        
+ENGL2617          2 ENGLISH LITERATURE   SECOND ENGLISH COURSE         
+MATH1101          1 CALCULUS 1           SECOND MATH COURSE            
+ENGL1001          1 AMERICAN LITERATURE  FIRST ENGLISH COURSE          
+MATH1011          1 TRIG. N ALGEBRA      FIRST MATH COURSE             
+GEOG1010          1 TEXAS GEOGRAPHY      FIRST GEOGRAPHY COURSE 
+
+
+select * from student_course;
+
+    STU_ID COURSE_I   SECTION#
+---------- -------- ----------
+     10001 MATH1101          1
+     10002 ENGL2617          2
+     10003 ENGL1001          1
+     10003 ENGL2617          2
+     10003 GEOG101           1
+     10004 COSC1315          1
+     10005 MATH1101          1
+     10006 GEOG101           1
+     10006 GEOG1791          2
+     10007 COSC1315          1
+     10007 ITSE2309          1
+
+    STU_ID COURSE_I   SECTION#
+---------- -------- ----------
+     10008 COSC1315          1
+     10009 ITSE2309          1
+     10010 ENGL2617          2
+
+describe student;
+
+Name       Null?    Type         
+---------- -------- ------------ 
+STU_ID     NOT NULL NUMBER       
+LNAME               VARCHAR2(20) 
+FNAME               VARCHAR2(20) 
+MI                  VARCHAR2(1)  
+SEX                 VARCHAR2(1)  
+MAJOR               VARCHAR2(10) 
+HOME_STATE          VARCHAR2(4) 
+
+describe course;
+
+Name       Null?    Type         
+---------- -------- ------------ 
+STU_ID     NOT NULL NUMBER       
+LNAME               VARCHAR2(20) 
+FNAME               VARCHAR2(20) 
+MI                  VARCHAR2(1)  
+SEX                 VARCHAR2(1)  
+MAJOR               VARCHAR2(10) 
+HOME_STATE          VARCHAR2(4)  
+Name          Null?    Type         
+------------- -------- ------------ 
+COURSE_ID     NOT NULL VARCHAR2(8)  
+SECTION#               NUMBER       
+C_NAME                 VARCHAR2(20) 
+C_DESCRIPTION          VARCHAR2(30) 
+
+describe student_course;
+
+Name       Null?    Type         
+---------- -------- ------------ 
+STU_ID     NOT NULL NUMBER       
+LNAME               VARCHAR2(20) 
+FNAME               VARCHAR2(20) 
+MI                  VARCHAR2(1)  
+SEX                 VARCHAR2(1)  
+MAJOR               VARCHAR2(10) 
+HOME_STATE          VARCHAR2(4)  
+Name          Null?    Type         
+------------- -------- ------------ 
+COURSE_ID     NOT NULL VARCHAR2(8)  
+SECTION#               NUMBER       
+C_NAME                 VARCHAR2(20) 
+C_DESCRIPTION          VARCHAR2(30) 
+Name      Null?    Type        
+--------- -------- ----------- 
+STU_ID    NOT NULL NUMBER      
+COURSE_ID NOT NULL VARCHAR2(8) 
+SECTION#           NUMBER  
+
+3.
+declare
+    v_stu_id student_course.stu_id%type;
+    c_stu_id number;
+    cursor c1 is 
+        select stu_id, count(stu_id)
+        from student_course
+        group by stu_id;
+begin
+    open c1;
+    loop
+        fetch c1 into v_stu_id, c_stu_id;
+        exit when c1%notfound;
+        dbms_output.put_line( 'student id: '||v_stu_id|| ' No.of courses: '||c_stu_id);
+    end loop;
+    close c1;
+end;
+
+student id: 10001 No.of courses: 1
+student id: 10002 No.of courses: 1
+student id: 10003 No.of courses: 3
+student id: 10004 No.of courses: 1
+student id: 10005 No.of courses: 1
+student id: 10006 No.of courses: 2
+student id: 10007 No.of courses: 2
+student id: 10008 No.of courses: 1
+student id: 10009 No.of courses: 1
+student id: 10010 No.of courses: 1
+
+4.
+declare
+    enroll_num number;
+begin
+    select distinct count(stu_id)
+    into enroll_num
+    from student;
+    DBMS_OUTPUT.PUT_LINE(enroll_num);
+end;
+
+10
+
+5.
+
+
+declare
+    c_crse_id number;
+    v_crse_id student_course.course_id%type;
+    cursor c1 is 
+        select count(distinct course_id)
+        from student_course;
+
+begin
+    open c1;
+    loop
+        fetch c1 into c_crse_id;
+        exit when c1%notfound;
+        if c_crse_id > 10 then dbms_output.put_line('more than 10 courses have been established');
+        else dbms_output.put_line('less than 10 courses have been established');
+        end if;
+    end loop;
+    close c1;
+end;
+
+less than 10 courses have been established
+
+6.
+
+declare
+    TYPE stutab is TABLE of student%rowtype index by pls_integer;
+    stu_tab1 stutab;
+    instate number(2):=0;
+    outstate number(2):=0;
+
+begin
+    select * bulk collect into stu_tab1 from STUDENT;
+    for i in 1..stu_tab1.count loop
+        if stu_tab1(i).home_state = 'TX' then
+            instate := instate +1;
+            dbms_output.put_line('Student: '||stu_tab1(i).fname ||'is in state' );
+        else
+            outstate := outstate +1;
+            dbms_output.put_line('Student: '||stu_tab1(i).fname ||'is out of state'  );
+        end if;
+   end loop;
+   dbms_output.put_line(instate||' are instate students.');
+   dbms_output.put_line(outstate||' are out of state students.');
+end;
+
+Student: RONis in state 
+Student: PETERis in state
+Student: ANNEis out of state
+Student: JOHNis out of state
+Student: ALTONis out of state
+Student: DIANEis out of state
+Student: JENNIFERis in state
+Student: ROBERTAis in state
+Student: PAULis out of state
+Student: RICHARDis in state
+5 are instate students.
+5 are out of state students.
+
+7.
+
+declare
+    TYPE stu_crse is TABLE of student_course%rowtype index by pls_integer;
+    table_stu stu_crse;
+    student STUDENT_COURSE.STU_ID%type := 10001;
+    crse STUDENT_COURSE.COURSE_ID%type := 'MATH1101';
+
+begin
+    select * bulk collect into table_stu from STUDENT_COURSE;
+    for i in 1..table_stu.count loop
+        if table_stu(i).stu_id = student and table_stu(i).course_id = crse then
+            dbms_output.put_line('Student: '||student ||', is in the specified course '|| crse );
+        else
+            dbms_output.put_line('Student: '||student ||', is not in the specified course '|| crse );
+        end if;
+   end loop;  
+end;
+
+Student: 10001, is in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified course MATH1101
+Student: 10001, is not in the specified
+course MATH1101
+Student: 10001, is not in the specified course MATH1101
+
+8.
+declare
+    type stu_table is table of student%rowtype index by pls_integer;
+    stutab stu_table;
+    fstu number(2) :=0;
+    mstu number(2) := 0;
+begin 
+    select * bulk collect into stutab from student;
+    for i in 1..stutab.count loop
+        case
+        when stutab(i).sex = 'F' then
+            fstu := fstu+1;
+            dbms_output.put_line('student: '||stutab(i).fname||' is female. In '||stutab(i).major||' major');
+        else
+            mstu := mstu +1;
+            dbms_output.put_line('student: '||stutab(i).fname||' is male.In '||stutab(i).major||' major');
+        end case;
+    end loop;
+   
+end;
+
+
+
+9.
+
+declare
+    type stu_table is table of student%rowtype index by pls_integer;
+    stutab stu_table;
+    fstu number(2) :=0;
+    mstu number(2) := 0;
+begin 
+    select * bulk collect into stutab from student;
+    for i in 1..stutab.count loop
+        if stutab(i).sex = 'F' then
+            fstu := fstu+1;
+            dbms_output.put_line('student: '||stutab(i).fname||' is female. In '||stutab(i).major||' major');
+        else
+            mstu := mstu +1;
+            dbms_output.put_line('student: '||stutab(i).fname||' is male.In '||stutab(i).major||' major');
+        end if;
+    end loop;
+   
+end;
+
+
+student: RON is male.In MATH major
+student: PETER is male.In ENGLISH major
+student: ANNE is female. In ENGLISH major
+student: JOHN is male.In COMPSCI major
+student: ALTON is female. In MATH major
+student: DIANE is female. In GEORGRAPHY major
+student: JENNIFER is female. In COMPSCI major
+student: ROBERTA is female. In COMPSC major
+student: PAUL is male.In MATH major
+student: RICHARD is male.In ENGLISH major
+
+10.
+create table new_student
+(Stu_ID NUMBER(5),
+ Lname varchar2(15),
+ Fname varchar2(15),
+ Mi varchar2(1),
+ Sex varchar2(1),
+ Major varchar2(10),
+ Home_State varchar2(4));
+ 
+declare
+    type stu_table is table of student%rowtype index by pls_integer;
+    stutab stu_table;
+    stu number :=1;
+begin
+    select * bulk collect into stutab from student;
+    while stu <11 loop
+        insert into new_student(stu_id) values (stutab(stu).stu_id);
+        stu := stu +1;
+    end loop;
+end;

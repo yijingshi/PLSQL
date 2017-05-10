@@ -1,0 +1,236 @@
+1.
+create or replace procedure emp_table(
+p_empno in number)
+as
+cursor cur_emp is 
+    select * from employee;
+    type type_emp is TABLE of cur_emp%rowtype index by pls_integer;
+    table_emp type_emp;
+begin
+open cur_emp;
+loop
+    fetch cur_emp bulk collect into table_emp;
+        for i in 1..table_emp.count loop
+            if table_emp(i).empno = p_empno then
+                dbms_output.put_line(table_emp(i).EMPNO||' '||table_emp(i).ENAME);
+            else
+                dbms_output.put_line('Employee number doesnt exist');
+            end if;
+        end loop;
+    exit when cur_emp%notfound;
+end loop;
+close cur_emp;
+end emp_table;
+
+--------
+declare
+empno number := 7654;
+begin
+emp_table(empno);
+end;
+
+7654 MARTIN
+------
+declare
+empno number := 7888;
+begin
+emp_table(empno);
+end;
+
+Employee number doesnt exist
+
+
+2.
+create or replace function comp_date (
+p_data_1 in DATE,
+p_data_2 in DATE) 
+ RETURN number 
+ IS
+    p_result number;
+begin
+    if p_data_1 > p_data_2 then
+    p_result := 1;
+    ELSIF p_data_1 < p_data_2 then
+    p_result := -1;
+    else 
+    p_result := 0;
+    end if;
+    return p_result;
+end;
+
+------------------------------
+declare
+    p_result number;
+begin
+    p_result := comp_date('17APR17','17APR18');
+    dbms_output.put_line(p_result);
+end;
+
+-1
+-----------------------
+declare
+    p_result number;
+begin
+    p_result := comp_date('17APR17','17APR17');
+    dbms_output.put_line(p_result);
+end;
+
+0
+-------------------------
+declare
+    p_result number;
+begin
+    p_result := comp_date('17APR17','17APR16');
+    dbms_output.put_line(p_result);
+end;
+
+1
+
+
+3.
+create or replace procedure cus_info(
+p_acctid in number)
+as 
+cursor cur_shopper is 
+    select * from bb_shopper;
+    type type_shopper is TABLE of cur_shopper%rowtype index by pls_integer;
+    table_shopper type_shopper;
+begin
+open cur_shopper;
+loop
+    fetch cur_shopper bulk collect into table_shopper;
+        for i in 1..table_shopper.count loop
+            if table_shopper(i).IDSHOPPER = p_acctid then
+            dbms_output.put_line(table_shopper(i).IDSHOPPER||' '||table_shopper(i).LASTNAME);
+            else
+            dbms_output.put_line('Cust_ID not valid');
+            end if;
+        end loop;
+    exit when cur_shopper%notfound;
+end loop;
+close cur_shopper;
+end;
+
+Procedure CUS_INFO compiled
+----------------------
+declare 
+p_acctid number := 21;
+begin
+cus_info(p_acctid);
+end;
+
+21 Carter
+
+-------------
+declare 
+p_acctid number := 43;
+begin
+cus_info(p_acctid);
+end;
+
+Cust_ID not valid
+
+4.
+create table physician(Phys_ID number(3)  ,
+	Phys_Name varchar2(25) ,
+	Phys_Phone varchar2(115) ,
+	Phys_Specialty varchar2(40));
+    CREATE SEQUENCE PHYS_ID_seq start with 100;
+
+INSERT INTO physician(Phys_ID)
+  VALUES(101);
+INSERT INTO physician(Phys_ID)
+  VALUES(102);
+INSERT INTO physician(Phys_ID)
+  VALUES(103);
+INSERT INTO physician(Phys_ID)
+  VALUES(104);
+INSERT INTO physician(Phys_ID)
+  VALUES(105);
+    
+declare
+t_phy physician%rowtype;
+cursor cur_phy is
+select * from physician
+for update;
+v_phyid number(3);
+
+begin
+
+open cur_phy;
+LOOP
+    fetch cur_phy into t_phy;
+    exit when cur_phy%notfound;
+    v_phyid := 101;
+    if t_phy.phys_id = v_phyid then 
+        update physician
+        set phys_name = 'wilcox chris', phys_phone = '512-329-1848',Phys_Specialty='Eyes, Ears, Throat'
+        where current of cur_phy;
+    else
+        insert into physician(Phys_ID,Phys_Name,Phys_Phone,Phys_Specialty)
+        values(v_phyid, 'tard kevin','512-888-8888','limbs');       
+    end if;    
+end loop;
+close cur_phy;
+end;
+
+PL/SQL procedure successfully completed.
+-------------------------------
+select * from physician;
+
+  PHYS_ID PHYS_NAME                 PHYS_PHONE                                                                                                          PHYS_SPECIALTY                          
+---------- ------------------------- ------------------------------------------------------------------------------------------------------------------- ----------------------------------------
+       101 wilcox chris              512-329-1848                                                                                                        Eyes, Ears, Throat                      
+       102                                                                                                                                                                                       
+       103                                                                                                                                                                                       
+       104                                                                                                                                                                                       
+       105 
+
+5.
+CREATE OR REPLACE FUNCTION fun_str(
+input_str IN VARCHAR2,
+f_len IN NUMBER)
+RETURN VARCHAR2
+AS
+f_str NUMBER(2);
+s_str CLOB;
+BEGIN
+
+CASE
+  WHEN f_len > 15 THEN
+    s_str := TRIM(' ' FROM input_str);
+    f_str := (f_len - 15);
+    s_str := RPAD(s_str,f_str);
+  WHEN f_len < 15 THEN
+    s_str:= TRIM(' ' FROM input_str);
+    f_str := (15 - f_len);
+    s_str := SUBSTR(s_str, 1, f_str);
+  WHEN f_len = 15 THEN
+    s_str := TRIM(' ' FROM input_str);
+END CASE;
+RETURN s_str;
+END fun_str;
+
+Function FUN_STR compiled
+
+
+DECLARE
+STR1 VARCHAR2(20):= 'Now is the Time.';
+STR2 VARCHAR2(20):= 'Now is the Time.';
+STR3 VARCHAR2(30):= '    Now is the Time.         ';
+STR4 CLOB;
+NUM1 NUMBER(2):=6;
+NUM2 NUMBER(2):=25;
+NUM3 NUMBER(2):=15;
+BEGIN
+STR4 := fun_str(STR1, NUM1);
+DBMS_OUTPUT.PUT_LINE(STR4);
+STR4 := fun_str(STR2, NUM2);
+DBMS_OUTPUT.PUT_LINE(STR4);
+STR4 := fun_str(STR3, NUM3);
+DBMS_OUTPUT.PUT_LINE(STR4);
+END;
+
+Now is th
+Now is the
+Now is the Time.

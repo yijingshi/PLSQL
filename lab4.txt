@@ -1,0 +1,486 @@
+1.
+CREATE OR REPLACE PROCEDURE p_purchase_order
+	(p_low_cust_id IN NUMBER, p_high_cust_id IN NUMBER)
+IS
+	CURSOR cur_customer (p_cust_id NUMBER) IS
+		SELECT idshopper
+		FROM cc_basket
+		WHERE idshopper = p_cust_id
+		GROUP BY idshopper;
+	rec_customer cur_customer%ROWTYPE;
+	lv_cust_id NUMBER;
+BEGIN
+	DBMS_OUTPUT.PUT_LINE('Ranges: ' || p_low_cust_id || ', ' || p_high_cust_id);
+	IF p_low_cust_id < p_high_cust_id THEN
+		FOR lv_cust_id IN p_low_cust_id..p_high_cust_id LOOP	
+			OPEN cur_customer(lv_cust_id);
+			FETCH cur_customer INTO rec_customer;
+			IF cur_customer%FOUND THEN
+					DBMS_OUTPUT.PUT_LINE(lv_cust_id || ' has a purchase order');
+			ELSE
+				DBMS_OUTPUT.PUT_LINE(lv_cust_id || ' does not have a purchase order');
+			END IF;
+			CLOSE cur_customer;
+		END LOOP;
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('Invalid customer id range. Low number must be greater than high number');
+	END IF;
+END;
+
+Procedure P_PURCHASE_ORDER compiled
+
+BEGIN
+	p_purchase_order(90001, 90008);
+	p_purchase_order(90003, 90007);
+	p_purchase_order(90009, 90010);
+	p_purchase_order(90005, 90004);
+END;
+
+PL/SQL procedure successfully completed.
+
+Ranges: 90001, 90008
+90001 has a purchase order
+90002 has a purchase order
+90003 has a purchase order
+90004 has a purchase order
+90005 has a purchase order
+90006 has a purchase order
+90007 has a purchase order
+90008 does not have a purchase order
+Ranges: 90003, 90007
+90003 has a purchase order
+90004 has a purchase order
+90005 has a purchase order
+90006 has a purchase order
+90007 has a purchase order
+Ranges: 90009, 90010
+90009 does not have a purchase order
+90010 does not have a purchase order
+Ranges: 90005, 90004
+Invalid customer id range. Low number must be greater than high number
+
+2.
+
+CREATE TABLE PHYSICIAN (
+	Phys_ID NUMBER(4),
+	Phys_Name VARCHAR2(40),
+	Phys_Phone VARCHAR2(12),
+	Phys_Specialty VARCHAR2(25)
+);
+
+insert into physician (Phys_ID,Phys_Name,Phys_Phone,Phys_Specialty)
+values (101, 'Wilcox, Chris', '512-329-1848', 'Eyes, Ears, Throat');
+insert into physician (Phys_ID,Phys_Name,Phys_Phone,Phys_Specialty)
+values (102, 'Nusca, Jane', '512-516-3947', 'Cardiovascular');
+insert into physician (Phys_ID,Phys_Name,Phys_Phone,Phys_Specialty)
+values (103, 'Gomez, Juan', '512-382-4987', 'Orthopedics');
+insert into physician (Phys_ID,Phys_Name,Phys_Phone,Phys_Specialty)
+values (104, 'Li, Jan', '512-516-3948', 'Cardiovascular');
+insert into physician (Phys_ID,Phys_Name,Phys_Phone,Phys_Specialty)
+values (105, 'Simmons, Alex', '512-442-5700', 'Hemotology');
+
+CREATE TABLE TREATMENT (
+	Pat_Nbr NUMBER(4),
+	Phys_ID NUMBER(4),
+	Trt_Procedure VARCHAR2(5),
+	Trt_Date DATE
+);
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (3249, 101, '13-08', TO_DATE ('12-FEB-1999', 'DD-MON-YYYY'));
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (1379, 103, '27-45', TO_DATE ('25-MAR-1999', 'DD-MON-YYYY'));
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (3249, 103, '88-20', TO_DATE ('22-JAN-1999', 'DD-MON-YYYY'));
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (5116, 104, '52-14', TO_DATE ('03-APR-1999', 'DD-MON-YYYY'));
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (4500, 101, '13-08', TO_DATE ('04-FEB-1999', 'DD-MON-YYYY'));
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (8031, 102, '52-14', TO_DATE ('15-MAR-2000', 'DD-MON-YYYY'));
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (5116, 104, '52-14', TO_DATE ('05-FEB-2001', 'DD-MON-YYYY'));
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (5872, 105, '60-00', TO_DATE ('13-FEB-2000', 'DD-MON-YYYY'));
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (3249, 103, '88-20', TO_DATE ('24-JAN-2000', 'DD-MON-YYYY'));
+insert into treatment (Pat_Nbr,Phys_ID,Trt_Procedure,Trt_Date)
+values (8659, 104, '60-00', TO_DATE ('08-APR-2001', 'DD-MON-YYYY'));
+
+CREATE TABLE PATIENT (
+	Pat_Nbr NUMBER(4),
+	Pat_Name VARCHAR2(40),
+	Pat_Address VARCHAR2(40),
+	Pat_City VARCHAR2(12),
+	Pat_State VARCHAR2(2),
+	Pat_ZIP NUMBER(5),
+	Pat_Room NUMBER(3),
+	Pat_Bed NUMBER(2)
+);
+insert into patient (Pat_Nbr,Pat_Name,Pat_Address,Pat_City,Pat_State,Pat_ZIP,Pat_Room,Pat_Bed)
+values(1379, 'Cribbs, John', '2110 Main St.', 'Austin', 'TX', 78711, 101, 1);
+insert into patient (Pat_Nbr,Pat_Name,Pat_Address,Pat_City,Pat_State,Pat_ZIP,Pat_Room,Pat_Bed)
+values(3249, 'Baker, Mary', '3547 W. 42nd St.', 'Berkeley', 'CA', 94117, 137, 2);
+insert into patient (Pat_Nbr,Pat_Name,Pat_Address,Pat_City,Pat_State,Pat_ZIP,Pat_Room,Pat_Bed)
+values(4500, 'Garcia, Juan', '1533 Telegraph', 'Berkeley', 'CA', 94117, 228, 2);
+insert into patient (Pat_Nbr,Pat_Name,Pat_Address,Pat_City,Pat_State,Pat_ZIP,Pat_Room,Pat_Bed)
+values(5116, 'Harris, Carol', '410 Ave. E', 'Austin', 'TX', 78705, 438, 1);
+insert into patient (Pat_Nbr,Pat_Name,Pat_Address,Pat_City,Pat_State,Pat_ZIP,Pat_Room,Pat_Bed)
+values(5872, 'Zimmer, Elka', '7988 Cedar', 'Cleveland', 'OH', 44066, 137, 1);
+insert into patient (Pat_Nbr,Pat_Name,Pat_Address,Pat_City,Pat_State,Pat_ZIP,Pat_Room,Pat_Bed)
+values(6213, 'Rose, David', '322 Bridge Ave.', 'Redwood', 'CA', 94065, 100, 1);
+insert into patient (Pat_Nbr,Pat_Name,Pat_Address,Pat_City,Pat_State,Pat_ZIP,Pat_Room,Pat_Bed)
+values(7459, 'Smith, Chris', '788 Cummings', 'Cleveland', 'OH', 44066, 438, 3);
+insert into patient (Pat_Nbr,Pat_Name,Pat_Address,Pat_City,Pat_State,Pat_ZIP,Pat_Room,Pat_Bed)
+values(8031, 'Fitch, Sylvia', '3380 Fox Ave.', 'Madison', 'WI', 53711, 420, 4);
+insert into patient (Pat_Nbr,Pat_Name,Pat_Address,Pat_City,Pat_State,Pat_ZIP,Pat_Room,Pat_Bed)
+values(8659, 'Hernandez, Juan', '8300 Geneva Dr.', 'Austin', 'TX', 78723, 350, 2);
+
+
+CREATE OR REPLACE PACKAGE Hospital AS
+
+	TYPE t_patRec IS RECORD (
+		Pat_Nbr TREATMENT.Pat_Nbr%TYPE,
+		Trt_Procedure TREATMENT.Trt_Procedure%TYPE,
+		Phys_ID TREATMENT.Phys_ID%TYPE,
+		Phys_Name PHYSICIAN.Phys_Name%TYPE,
+		Phys_Specialty PHYSICIAN.Phys_Specialty%TYPE
+	);
+
+	TYPE t_patTrt IS TABLE OF t_patRec INDEX BY PLS_INTEGER;
+
+	PROCEDURE BuildPatTbl(
+		p_treatments OUT t_patTrt,
+		p_num_rows IN OUT NUMBER
+	);
+
+	FUNCTION FindPatient(
+		p_pat_ID IN NUMBER
+	) RETURN BOOLEAN; 
+	
+	FUNCTION FindPatient(
+		p_pat_Name IN VARCHAR2
+	) RETURN BOOLEAN; 
+
+	PROCEDURE NewPhys(
+		p_Phys_ID IN NUMBER,
+		p_Phys_Name IN VARCHAR2,
+		p_Phys_Phone IN VARCHAR2,
+		p_Phys_Specialty IN VARCHAR2		
+	);
+	
+	e_DupPhysFound EXCEPTION;
+	
+END Hospital;
+
+Package HOSPITAL compiled
+
+
+CREATE OR REPLACE PACKAGE BODY Hospital AS
+
+	PROCEDURE BuildPatTbl(
+		p_treatments OUT t_patTrt,
+		p_num_rows IN OUT NUMBER
+	) 
+	IS
+	BEGIN
+		SELECT TREATMENT.Pat_Nbr, TREATMENT.Trt_Procedure, TREATMENT.Phys_ID, PHYSICIAN.Phys_Name, PHYSICIAN.Phys_Specialty
+			BULK COLLECT INTO p_treatments
+			FROM TREATMENT, PHYSICIAN WHERE TREATMENT.Phys_ID = PHYSICIAN.Phys_ID;
+			p_num_rows := SQL%ROWCOUNT;
+	END BuildPatTbl;
+
+	FUNCTION FindPatient(
+		p_pat_ID IN NUMBER
+	) RETURN BOOLEAN 
+	IS
+		lv_row_found NUMBER;
+	BEGIN
+		SELECT COUNT(*) INTO lv_row_found FROM PATIENT WHERE Pat_Nbr = p_pat_ID;
+		IF (lv_row_found = 0) THEN
+			RETURN FALSE;
+		ELSE
+			RETURN TRUE;
+		END IF;
+	END FindPatient;
+	
+	FUNCTION FindPatient(
+		p_pat_Name IN VARCHAR2
+	) RETURN BOOLEAN 
+	IS
+		lv_row_found NUMBER;
+	BEGIN
+		SELECT COUNT(*) INTO lv_row_found FROM PATIENT WHERE PATIENT.Pat_Name = p_pat_Name;
+		IF (lv_row_found = 0) THEN
+			RETURN FALSE;
+		ELSE
+			RETURN TRUE;
+		END IF;
+	END FindPatient;
+
+	PROCEDURE NewPhys(
+		p_Phys_ID IN NUMBER,
+		p_Phys_Name IN VARCHAR2,
+		p_Phys_Phone IN VARCHAR2,
+		p_Phys_Specialty IN VARCHAR2		
+	)
+	IS
+		lv_row_found NUMBER;
+	BEGIN
+		SELECT COUNT(*) INTO lv_row_found FROM PHYSICIAN WHERE p_Phys_ID = Phys_ID;
+		IF (lv_row_found = 0) THEN
+			INSERT INTO PHYSICIAN (Phys_ID, Phys_Name, Phys_Phone, Phys_Specialty)
+			VALUES(p_Phys_ID, p_Phys_Name, p_Phys_Phone, p_Phys_Specialty);
+		ELSE
+			RAISE e_DupPhysFound;
+		END IF;
+	END NewPhys;
+
+END Hospital;
+
+Package body HOSPITAL compiled
+
+3.
+BEGIN
+	IF (Hospital.FindPatient(4500) = TRUE) THEN
+		DBMS_OUTPUT.PUT_LINE('Patient is present in the table');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('Patient is NOT present in the table');
+	END IF;
+
+	IF (Hospital.FindPatient('Rose, David') = TRUE) THEN
+		DBMS_OUTPUT.PUT_LINE('Patient is present in the table');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('Patient is NOT present in the table');
+	END IF;
+
+	IF (Hospital.FindPatient(1234) = TRUE) THEN
+		DBMS_OUTPUT.PUT_LINE('Patient is present in the table');
+	ELSE
+		DBMS_OUTPUT.PUT_LINE('Patient is NOT present in the table');
+	END IF;
+
+	Hospital.NewPhys(101, 'Wilcox, Chris', '512-329-1848', 'Eyes, Ears, Throat');
+	
+	Hospital.NewPhys(101, 'Wilcox, Chris', '512-329-1848', 'Eyes, Ears, Throat');
+EXCEPTION
+	WHEN Hospital.e_DupPhysFound THEN
+		DBMS_OUTPUT.PUT_LINE('Physician is already in the table');	
+END;
+
+Patient is present in the table
+Patient is present in the table
+Patient is NOT present in the table
+Physician is already in the table
+
+DECLARE
+  lv_treatments Hospital.t_patTrt;
+  lv_num_rows NUMBER;
+BEGIN
+	Hospital.BuildPatTbl(lv_treatments, lv_num_rows);
+	DBMS_OUTPUT.PUT_LINE(lv_num_rows || ' rows selected');
+
+	FOR i IN 1..lv_treatments.COUNT LOOP
+		DBMS_OUTPUT.PUT_LINE('Patient: ' || lv_treatments(i).Pat_Nbr);
+    DBMS_OUTPUT.PUT_LINE('    Procedure: ' || lv_treatments(i).Trt_Procedure);
+    DBMS_OUTPUT.PUT_LINE('    Physician ID: ' || lv_treatments(i).Phys_ID);
+    DBMS_OUTPUT.PUT_LINE('    Physician Name: ' || lv_treatments(i).Phys_Name);
+    DBMS_OUTPUT.PUT_LINE('    Physician Specialty: ' || lv_treatments(i).Phys_Specialty);	
+	END LOOP;
+END;
+
+10 rows selected
+Patient: 4500
+    Procedure: 13-08
+    Physician ID: 101
+    Physician Name: Wilcox, Chris
+    Physician Specialty: Eyes, Ears, Throat
+Patient: 3249
+    Procedure: 13-08
+    Physician ID: 101
+    Physician Name: Wilcox, Chris
+    Physician Specialty: Eyes, Ears, Throat
+Patient: 8031
+    Procedure: 52-14
+    Physician ID: 102
+    Physician Name: Nusca, Jane
+    Physician Specialty: Cardiovascular
+Patient: 3249
+    Procedure: 88-20
+    Physician ID: 103
+    Physician Name: Gomez, Juan
+    Physician Specialty: Orthopedics
+Patient: 3249
+    Procedure: 88-20
+    Physician ID: 103
+    Physician Name: Gomez, Juan
+    Physician
+Specialty: Orthopedics
+Patient: 1379
+    Procedure: 27-45
+    Physician ID: 103
+    Physician Name: Gomez, Juan
+    Physician Specialty: Orthopedics
+Patient: 8659
+    Procedure: 60-00
+    Physician ID: 104
+    Physician Name: Li, Jan
+    Physician Specialty: Cardiovascular
+Patient: 5116
+    Procedure: 52-14
+    Physician ID: 104
+    Physician Name: Li, Jan
+    Physician Specialty: Cardiovascular
+Patient: 5116
+    Procedure: 52-14
+    Physician ID: 104
+    Physician Name: Li, Jan
+    Physician Specialty: Cardiovascular
+Patient: 5872
+    Procedure: 60-00
+    Physician ID: 105
+    Physician Name: Simmons, Alex
+    Physician Specialty:
+Hemotology
+
+4.
+CREATE OR REPLACE PROCEDURE NewUpdateProcedure(
+		p_Pro_Nbr IN VARCHAR2,
+		p_Pro_Desc IN VARCHAR2,
+		p_Pro_Charge IN NUMBER
+	)
+	IS
+		lv_row_found NUMBER;
+	BEGIN
+		SELECT COUNT(*) INTO lv_row_found FROM PROCEDURE_TABLE WHERE 
+			p_Pro_Nbr = Pro_Nbr;
+		IF (lv_row_found = 0) THEN
+			INSERT INTO PROCEDURE_TABLE (Pro_Nbr, Pro_Desc, Pro_Charge)
+			VALUES(p_Pro_Nbr, p_Pro_Desc, p_Pro_Charge);
+		ELSE
+			UPDATE PROCEDURE_TABLE
+			SET Pro_Nbr = p_Pro_Nbr, 
+				Pro_Desc = p_Pro_Desc,
+				Pro_Charge = p_Pro_Charge
+			WHERE p_Pro_Nbr = Pro_Nbr;
+		END IF;
+	END NewUpdateProcedure;
+
+CREATE TABLE PROCEDURE_TABLE (
+	Pro_Nbr VARCHAR2(5),
+	Pro_Desc VARCHAR2(40),
+	Pro_Charge NUMBER(6,2)
+);
+
+BEGIN
+	NewUpdateProcedure('13-08', 'Throat culture', 15.00);
+	NewUpdateProcedure('27-45', 'X-Ray', 62.00);
+	NewUpdateProcedure('52-14', 'Cardiogram', 135.00);
+	NewUpdateProcedure('60-00', 'Blood Analysis', 58.00);
+	NewUpdateProcedure('88-20', 'MRI', 800.00);
+END;
+
+SELECT * FROM PROCEDURE_TABLE;
+PRO_N PRO_DESC                                 PRO_CHARGE
+----- ---------------------------------------- ----------
+13-08 Throat culture                                   15
+27-45 X-Ray                                            62
+52-14 Cardiogram                                      135
+60-00 Blood Analysis                                   58
+88-20 MRI                                             800
+
+5.
+
+
+CREATE or REPLACE PROCEDURE NewUpdateTreatment(
+		p_Pat_Nbr IN NUMBER,
+		p_Phys_ID IN NUMBER,
+		p_Trt_Procedure IN VARCHAR2,
+		p_Trt_Date IN DATE
+	)
+	IS
+	BEGIN			
+			UPDATE TREATMENT
+			SET Pat_Nbr = p_Pat_Nbr, 
+				Phys_ID = p_Phys_ID,
+				Trt_Procedure = p_Trt_Procedure,
+				Trt_Date = p_Trt_Date
+			WHERE p_Pat_Nbr = Pat_Nbr AND p_Phys_ID = Phys_ID AND p_Trt_Procedure = Trt_Procedure AND p_Trt_Date = Trt_Date;
+ IF SQL%NOTFOUND THEN
+				INSERT INTO TREATMENT (Pat_Nbr, Phys_ID, Trt_Procedure, Trt_Date)
+				VALUES(p_Pat_Nbr, p_Phys_ID, p_Trt_Procedure, p_Trt_Date);
+	END IF;
+END NewUpdateTreatment;
+
+Procedure NEWUPDATETREATMENT compiled
+
+CREATE OR REPLACE TRIGGER treatment_trg
+	BEFORE INSERT OR UPDATE OF Trt_Date ON TREATMENT
+	FOR EACH ROW
+	WHEN (NEW.Trt_Date > CURRENT_DATE OR NEW.Trt_Date < (CURRENT_DATE - 90))
+BEGIN
+	RAISE_APPLICATION_ERROR(-20100, 'Invalid treatment date');
+END;
+
+Trigger TREATMENT_TRG compiled
+
+BEGIN
+	NewUpdateTreatment(3249, 101, '13-08', TO_DATE ('22-APR-2017', 'DD-MON-YYYY'));
+END;
+
+PL/SQL procedure successfully completed.
+
+BEGIN
+	NewUpdateTreatment(3249, 101, '13-08', TO_DATE ('22-APR-2016', 'DD-MON-YYYY'));
+END;
+
+Error report -
+ORA-20100: Invalid treatment date
+ORA-06512: at "SYSTEM.TREATMENT_TRG", line 2
+ORA-04088: error during execution of trigger 'SYSTEM.TREATMENT_TRG'
+ORA-06512: at "SYSTEM.NEWUPDATETREATMENT", line 16
+ORA-06512: at line 2
+
+6.
+CREATE TABLE trt_Stats (
+Trt_Procedure varchar2(4) PRIMARY KEY, 
+Trt_INS_Count NUMBER(3),
+Trt_DEL_Count NUMBER(3),
+Trt_UPD_Count NUMBER(3));
+
+Table TRT_STATS created.
+
+CREATE OR REPLACE TRIGGER trt_Stats_TRG
+	BEFORE INSERT OR UPDATE OR DELETE ON TREATMENT
+	FOR EACH ROW
+BEGIN
+IF INSERTING THEN
+	UPDATE trt_Stats
+	SET Trt_INS_Count = Trt_INS_Count + 1
+	WHERE :OLD.Trt_Procedure = :NEW.Trt_Procedure;
+        IF SQL%NOTFOUND THEN
+		INSERT INTO trt_Stats (Trt_Procedure, Trt_INS_Count)
+		VALUES (:NEW.Trt_Procedure, 1);
+	END IF;
+END IF;
+  IF UPDATING THEN
+	UPDATE trt_Stats
+	SET Trt_UPD_Count = Trt_UPD_Count + 1
+	WHERE :OLD.Trt_Procedure = :NEW.Trt_Procedure;
+        IF SQL%NOTFOUND THEN
+		INSERT INTO trt_Stats (Trt_Procedure, Trt_UPD_Count)
+		VALUES (:NEW.Trt_Procedure, 1);	
+	END IF;
+  END IF;
+IF DELETING THEN
+	UPDATE trt_Stats
+	SET Trt_DEL_Count = Trt_DEL_Count + 1
+	WHERE Trt_Procedure = :OLD.Trt_Procedure;
+        IF SQL%NOTFOUND THEN
+	  INSERT INTO trt_Stats (Trt_Procedure, Trt_DEL_Count)
+	  VALUES (:OLD.Trt_Procedure, 1);
+	END IF;
+  END IF;
+END trt_Stats_TRG;
+
+Trigger TRT_STATS_TRG compiled
+            
